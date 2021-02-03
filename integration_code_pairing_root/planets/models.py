@@ -20,10 +20,14 @@ class Planet(models.Model):
         db_table = 'planets'
     
     def to_dict(self):
-        seralized = {}
+        serialized = {}
         for field in self._meta.get_fields():
             if field.name in self.unserializable_fields:
                 continue
-            
-            seralized[field.name] = getattr(self, field.name)
-        return seralized
+
+            serialized[field.name] = getattr(self, field.name)
+
+            if field.name == 'diameter':
+                serialized[field.name] *= .6214
+
+        return serialized

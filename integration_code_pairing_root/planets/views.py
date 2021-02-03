@@ -6,6 +6,17 @@ from django.shortcuts import render
 from planets.models import Planet
 from swapi.api import get_planet_by_id
 
+
+def get_planets_by_population(request, population):
+    planets = Planet.objects.filter(population__gte=population)
+    planetsList = []
+
+    for planet in planets:
+        planetsList.append(planet.to_dict())
+
+    return JsonResponse(planetsList, safe=False)
+
+
 def get_by_id(request, id):
     try:
         planet = Planet.objects.get(pk=id)
@@ -25,5 +36,5 @@ def get_by_id(request, id):
         )
         planet.save()
     
-    return JsonResponse(planet.to_json(), status=200)
+    return JsonResponse(planet.to_dict(), status=200)
     
